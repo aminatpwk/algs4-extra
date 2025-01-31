@@ -28,6 +28,34 @@ public class BellmanFordSP {
         }
     }
 
+    /**
+     * zgjidhje e ushtrimit 15:
+     * Suppose that we add a constructor to the Bellman-Ford algorithm that differs from the constructor given only in that
+     * it omits the second argument and that it initializes all distTo[] entries to 0. Show that, if a client uses that constructor,
+     * a client call to hasNegativeCycle( ) returns true if and only if the graph has a negative cycle
+     * (and negativeCycle( ) returns that cycle).
+     * @param G
+     */
+    public BellmanFordSP(EdgeWeightedDigraph G) {
+        distTo = new double[G.V()];
+        edgeTo = new DirectedEdge[G.V()];
+        onQueue = new boolean[G.V()];
+        for(int v=0; v< G.V(); v++){
+            distTo[v] = 0.0;
+        }
+        queue = new Queue<Integer>();
+        for(int v=0; v< G.V(); v++){
+            if(distTo[v]==0.0){
+                queue.enqueue(v);
+                onQueue[v] = true;
+            }
+        }
+        while(!queue.isEmpty() && !hasNegativeCycle()){
+            int v = queue.dequeue();
+            onQueue[v] = false;
+            relax(G, v);
+        }
+    }
     private void relax(EdgeWeightedDigraph G, int v){
         for(DirectedEdge e : G.adj(v)){
             int w = e.to();
